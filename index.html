@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Breaking News</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <img src="breaking-news-dark.png" alt="Breaking News" />
+    <span class="header-title">Breaking News</span>
+  </header>
+
+  <div class="status-bar">
+    <div class="dot" id="dot"></div>
+    <span id="status-text">Enter your API key to connect</span>
+    <span class="heartbeat-tick" id="heartbeat-tick">&#9829;</span>
+  </div>
+
+  <div class="key-form">
+    <div class="key-input-wrap">
+      <input
+        type="password"
+        id="api-key-input"
+        placeholder="API key"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="eye-btn" id="eye-btn" onclick="toggleKeyVisibility()" title="Show / hide key" tabindex="-1">
+        <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="12" rx="10" ry="6"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <svg id="eye-off-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+             style="display:none">
+          <ellipse cx="12" cy="12" rx="10" ry="6"/>
+          <circle cx="12" cy="12" r="3"/>
+          <line x1="2" y1="2" x2="22" y2="22"/>
+        </svg>
+      </button>
+    </div>
+    <button id="connect-btn" onclick="handleConnect()">Connect</button>
+  </div>
+
+  <div class="feed" id="feed">
+    <div class="feed-empty" id="feed-empty">&mdash; no messages &mdash;</div>
+  </div>
+
+</div>
+<script src="app.js"></script>
+</body>
+</html>
