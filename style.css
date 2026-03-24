@@ -4,9 +4,9 @@
   --bg:       #0a0a0a;
   --surface:  #111111;
   --border:   #222222;
-  --muted:    #444444;
+  --muted:    #666666;
   --text:     #e8e8e8;
-  --dim:      #888888;
+  --dim:      #aaaaaa;
   --red:      #e63030;
   --red-dim:  #7a1a1a;
   --green:    #22c55e;
@@ -76,6 +76,8 @@ header img {
   font-size: 0.75rem;
   color: var(--dim);
   flex-shrink: 0;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .dot {
@@ -146,7 +148,7 @@ header img {
   transition: border-color 0.2s;
 }
 
-.key-form input::placeholder { color: var(--muted); }
+.key-form input::placeholder { color: var(--dim); }
 .key-form input:focus { border-color: var(--dim); }
 
 .eye-btn {
@@ -158,13 +160,13 @@ header img {
   border: none;
   padding: 0;
   cursor: pointer;
-  color: var(--muted);
+  color: var(--dim);
   display: flex;
   align-items: center;
   transition: color 0.15s;
 }
 
-.eye-btn:hover { color: var(--dim); }
+.eye-btn:hover { color: var(--text); }
 
 #connect-btn {
   background: var(--red);
@@ -193,6 +195,24 @@ header img {
 #connect-btn.disconnect:hover {
   border-color: var(--red-dim);
   color: var(--red);
+}
+
+/* ── Feed header (above scroll container) ───────── */
+
+.feed-header {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.6rem 0 0.4rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: none;
+}
+
+.feed-header.visible {
+  display: block;
 }
 
 /* ── Feed ─────────────────────────────────────── */

@@ -68,7 +68,7 @@ async function fetchHistory(key) {
   const msgs = (data.results || []).slice().reverse(); // oldest first
 
   if (msgs.length) {
-    addDivider('Recent history');
+    showFeedHeader('Recent history');
     msgs.forEach(m => addMessage(m, false));
     lastId = msgs[msgs.length - 1].id;
     scrollFeedToBottom(1200);
@@ -157,6 +157,18 @@ function addMessage(msg, isFresh) {
   }
 }
 
+function showFeedHeader(label) {
+  const el = document.getElementById('feed-header');
+  if (!el) return;
+  el.textContent = label;
+  el.classList.add('visible');
+}
+
+function hideFeedHeader() {
+  const el = document.getElementById('feed-header');
+  if (el) el.classList.remove('visible');
+}
+
 function addDivider(label) {
   const feed = document.getElementById('feed');
   const div  = document.createElement('div');
@@ -185,6 +197,7 @@ function clearFeed() {
   const feed  = document.getElementById('feed');
   feed.innerHTML = '<div class="feed-empty" id="feed-empty">&mdash; no messages &mdash;</div>';
   lastId = 0;
+  hideFeedHeader();
 }
 
 // Scroll the feed container to the bottom.
