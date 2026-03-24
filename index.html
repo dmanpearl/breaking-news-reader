@@ -13,15 +13,16 @@
 <div class="shell">
 
   <header>
-    <img src="breaking-news-dark.png" alt="Breaking News" />
-    <span class="header-title">Breaking News</span>
+    <div class="header-left">
+      <img src="breaking-news-dark.png" alt="Breaking News" />
+      <span class="header-title">Breaking News</span>
+    </div>
+    <div class="header-right">
+      <span id="status-text">Enter your API key to connect</span>
+      <span class="heartbeat-tick" id="heartbeat-tick">&#9829;</span>
+      <div class="dot" id="dot"></div>
+    </div>
   </header>
-
-  <div class="status-bar">
-    <div class="dot" id="dot"></div>
-    <span id="status-text">Enter your API key to connect</span>
-    <span class="heartbeat-tick" id="heartbeat-tick">&#9829;</span>
-  </div>
 
   <div class="key-form">
     <div class="key-input-wrap">

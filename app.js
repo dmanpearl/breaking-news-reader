@@ -1,6 +1,7 @@
 const API_BASE  = 'https://www.breakingnewsguys.com/api/v1';
 const KEY_STORE = 'bn_api_key';
 const HISTORY   = 10;
+const MAX_ITEMS = 75;
 
 let es        = null;
 let lastId    = 0;
@@ -38,7 +39,7 @@ function handleConnect() {
 
 function connect(key) {
   clearFeed();
-  setStatus('connecting', 'Loading history…');
+  setStatus('connecting', 'Loading history...');
 
   fetchHistory(key)
     .then(() => openStream(key))
@@ -70,9 +71,7 @@ async function fetchHistory(key) {
     addDivider('Recent history');
     msgs.forEach(m => addMessage(m, false));
     lastId = msgs[msgs.length - 1].id;
-    // Wait for all images to finish loading so scrollHeight is accurate,
-    // then animate from the top down to the bottom.
-    scrollAfterImages(document.getElementById('feed'), 1200);
+    scrollFeedToBottom(1200);
   }
 }
 
@@ -86,7 +85,7 @@ function openStream(key) {
     connected = true;
     setBtn(true);
     setStatus('connected', 'Live');
-    addDivider('Live');
+    // No "Live" divider -- they accumulate over long sessions
   });
 
   es.addEventListener('message', e => {
@@ -95,9 +94,8 @@ function openStream(key) {
       if (msg.id > lastId) {
         lastId = msg.id;
         addMessage(msg, true);
-        // Scroll after the new message's image (if any) has loaded.
-        const lastMsg = document.getElementById('feed').lastElementChild;
-        scrollAfterImages(lastMsg, 400);
+        trimFeed();
+        scrollFeedToBottom(400);
       }
     } catch (_) {}
   });
@@ -109,11 +107,12 @@ function openStream(key) {
   es.onerror = () => {
     connected = false;
     setBtn(false);
-    setStatus('error', 'Connection lost — reconnecting…');
+    setStatus('error', 'Connection lost — reconnecting...');
     es.addEventListener('connected', () => {
       connected = true;
       setBtn(true);
-      setStatus('connected', 'Live — reconnected');
+      setStatus('connected', 'Live');
+      // No divider on reconnect either
     }, { once: true });
   };
 }
@@ -166,46 +165,58 @@ function addDivider(label) {
   feed.appendChild(div);
 }
 
+// Remove oldest messages when feed exceeds MAX_ITEMS.
+function trimFeed() {
+  const feed = document.getElementById('feed');
+  const msgs = feed.querySelectorAll('.msg');
+  const excess = msgs.length - MAX_ITEMS;
+  if (excess <= 0) return;
+  for (let i = 0; i < excess; i++) {
+    msgs[i].remove();
+  }
+  // Also remove any orphaned divider that ends up at the very top.
+  const first = feed.firstElementChild;
+  if (first && first.classList.contains('feed-divider')) {
+    first.remove();
+  }
+}
+
 function clearFeed() {
   const feed  = document.getElementById('feed');
   feed.innerHTML = '<div class="feed-empty" id="feed-empty">&mdash; no messages &mdash;</div>';
   lastId = 0;
 }
 
-// Wait for every <img> inside `container` to finish loading,
-// then animate scroll to the bottom of the page.
-function scrollAfterImages(container, duration) {
-  const imgs = container ? Array.from(container.querySelectorAll('img')) : [];
-  const pending = imgs.filter(img => !img.complete);
+// Scroll the feed container to the bottom.
+function scrollFeedToBottom(duration) {
+  const feed = document.getElementById('feed');
+  if (!feed) return;
 
-  if (pending.length === 0) {
-    // No images, or all already cached — scroll immediately next paint.
-    requestAnimationFrame(() => smoothScrollToBottom(duration));
+  // Wait for any pending images to load so scrollHeight is accurate.
+  const imgs = Array.from(feed.querySelectorAll('img')).filter(img => !img.complete);
+
+  if (imgs.length === 0) {
+    requestAnimationFrame(() => animateFeedScroll(feed, duration));
     return;
   }
 
   let settled = 0;
-
   function onSettle() {
-    settled += 1;
-    if (settled >= pending.length) {
-      // All images resolved (loaded or errored). Now scrollHeight is final.
-      requestAnimationFrame(() => smoothScrollToBottom(duration));
+    settled++;
+    if (settled >= imgs.length) {
+      requestAnimationFrame(() => animateFeedScroll(feed, duration));
     }
   }
-
-  pending.forEach(img => {
+  imgs.forEach(img => {
     img.addEventListener('load',  onSettle, { once: true });
     img.addEventListener('error', onSettle, { once: true });
   });
 }
 
-// Animated scroll to bottom over `duration` ms using easeInOutCubic.
-function smoothScrollToBottom(duration) {
-  const start    = window.scrollY;
-  const end      = document.body.scrollHeight - window.innerHeight;
+function animateFeedScroll(feed, duration) {
+  const start    = feed.scrollTop;
+  const end      = feed.scrollHeight - feed.clientHeight;
   const distance = end - start;
-
   if (distance <= 0) return;
 
   const startTime = performance.now();
@@ -219,7 +230,7 @@ function smoothScrollToBottom(duration) {
   function step(now) {
     const elapsed  = now - startTime;
     const progress = Math.min(elapsed / duration, 1);
-    window.scrollTo(0, start + distance * easeInOutCubic(progress));
+    feed.scrollTop = start + distance * easeInOutCubic(progress);
     if (progress < 1) requestAnimationFrame(step);
   }
 
