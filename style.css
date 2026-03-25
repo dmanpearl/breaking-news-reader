@@ -117,12 +117,26 @@ header img {
 
 /* ── Key form ─────────────────────────────────── */
 
+.settings-panel {
+  overflow: hidden;
+  max-height: 120px;
+  transition: max-height 0.25s ease, opacity 0.2s ease;
+  opacity: 1;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-panel.closed {
+  max-height: 0;
+  opacity: 0;
+  border-bottom-color: transparent;
+}
+
 .key-form {
   padding: 0.85rem 0 0.6rem;
   display: flex;
   gap: 0.6rem;
   align-items: stretch;
-  border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
@@ -195,6 +209,44 @@ header img {
 #connect-btn.disconnect:hover {
   border-color: var(--red-dim);
   color: var(--red);
+}
+
+
+/* ── Gear / settings toggle ───────────────────── */
+
+.gear-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--dim);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 0 2px 6px;
+  border-left: 1px solid var(--border);
+  margin-left: 4px;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.gear-btn:hover { color: var(--text); }
+
+.gear-icon {
+  transition: transform 0.4s ease;
+}
+
+.gear-btn:hover .gear-icon {
+  transform: rotate(45deg);
+}
+
+.gear-arrow {
+  opacity: 0.6;
+  transition: transform 0.25s ease;
+}
+
+/* Arrow points down (open) by default; rotates up when closed */
+.gear-btn.panel-closed .gear-arrow {
+  transform: rotate(180deg);
 }
 
 /* ── Feed header (above scroll container) ───────── */

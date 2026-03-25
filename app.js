@@ -269,10 +269,35 @@ function setBtn(isConnected) {
     btn.textContent  = 'Disconnect';
     btn.className    = 'disconnect';
     input.disabled   = true;
+    closeSettings();
   } else {
     btn.textContent  = 'Connect';
     btn.className    = '';
     input.disabled   = false;
+    openSettings();
+  }
+}
+
+function openSettings() {
+  const panel = document.getElementById('settings-panel');
+  const gear  = document.getElementById('gear-btn');
+  if (panel) panel.classList.remove('closed');
+  if (gear)  gear.classList.remove('panel-closed');
+}
+
+function closeSettings() {
+  const panel = document.getElementById('settings-panel');
+  const gear  = document.getElementById('gear-btn');
+  if (panel) panel.classList.add('closed');
+  if (gear)  gear.classList.add('panel-closed');
+}
+
+function toggleSettings() {
+  const panel = document.getElementById('settings-panel');
+  if (panel && panel.classList.contains('closed')) {
+    openSettings();
+  } else {
+    closeSettings();
   }
 }
 
