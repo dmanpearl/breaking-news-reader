@@ -180,6 +180,13 @@ header img {
 .key-form input::placeholder { color: var(--dim); }
 .key-form input:focus { border-color: var(--dim); }
 
+.ui-icon {
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 .eye-btn {
   position: absolute;
   right: 0.6rem;
@@ -247,7 +254,11 @@ header img {
 .gear-btn:hover { color: var(--text); }
 
 .gear-icon {
+  width: 15px;
+  height: 15px;
   transition: transform 0.4s ease;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .gear-btn:hover .gear-icon {
@@ -256,12 +267,8 @@ header img {
 
 .gear-arrow {
   opacity: 0.6;
-  transition: transform 0.25s ease;
-}
-
-/* Arrow points down (open) by default; rotates up when closed */
-.gear-btn.panel-closed .gear-arrow {
-  transform: rotate(180deg);
+  font-size: 0.7rem;
+  line-height: 1;
 }
 
 /* ── Feed header (above scroll container) ───────── */

@@ -281,15 +281,19 @@ function setBtn(isConnected) {
 function openSettings() {
   const panel = document.getElementById('settings-panel');
   const gear  = document.getElementById('gear-btn');
+  const arrow = document.getElementById('gear-arrow');
   if (panel) panel.classList.remove('closed');
   if (gear)  gear.classList.remove('panel-closed');
+  if (arrow) arrow.textContent = '▼'; // down -- open
 }
 
 function closeSettings() {
   const panel = document.getElementById('settings-panel');
   const gear  = document.getElementById('gear-btn');
+  const arrow = document.getElementById('gear-arrow');
   if (panel) panel.classList.add('closed');
   if (gear)  gear.classList.add('panel-closed');
+  if (arrow) arrow.textContent = '▶'; // right -- closed
 }
 
 function toggleSettings() {
