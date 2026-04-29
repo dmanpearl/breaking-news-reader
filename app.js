@@ -130,9 +130,6 @@ function addMessage(msg, isFresh) {
   el.dataset.id = msg.id;
 
   const time   = formatTime(msg.created_at);
-  const sender = msg.sender
-    ? `<span class="msg-sender">${esc(msg.sender)}</span>`
-    : '';
   const badge  = isFresh
     ? '<span class="msg-new-badge">NEW</span>'
     : '';
@@ -143,7 +140,6 @@ function addMessage(msg, isFresh) {
   el.innerHTML = `
     <div class="msg-meta">
       <span class="msg-time">${time}</span>
-      ${sender}
       ${badge}
     </div>
     <div class="msg-headline">${esc(msg.headline)}</div>
